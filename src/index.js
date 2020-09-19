@@ -2,38 +2,41 @@
 
 let dogBar = document.querySelector("div#dog-bar")
 let dogInfo = document.querySelector("div#dog-info")
+let filterButton = document.querySelector("button#good-dog-filter")
 
-
-fetch("http://localhost:3000/pups")
-    .then(res => res.json())
-    .then(pupsObj => {
-        pupsObj.forEach(pupObj => {
-            turnObjToHTML(pupObj)
+function getAllpups () {
+    fetch("http://localhost:3000/pups")
+        .then(res => res.json())
+        .then(pupsObj => {
+            pupsObj.forEach(pupObj => {
+                turnObjToHTML(pupObj)
+            })
         })
-    })
+}
 
-//   let pupShowpage = () => {    
-//     let pupImg = document.createElement('img')
-//     let pupNameH2 = document.createElement('h2')
-//     let pupButton = document.createElement('button')
-   
-//   }
-    
+getAllpups()
+
+
+  
   
 let turnObjToHTML = (pup) => {
     let pupSpan = document.createElement('span')
     pupSpan.innerText = pup.name
-    pupSpan.id = "pupNameSpanBar"
+    pupSpan.className = "pupNameSpanBar"
     dogBar.append(pupSpan)
     pupSpan.style.cursor = "pointer"
 
-      
+   
     let pupImg = document.createElement('img')
+    pupImg.classList.add("profile")
     let pupNameH2 = document.createElement('h2')
+    pupNameH2.classList.add("profile")
     let pupButton = document.createElement('button')
-    // dogInfo.append(pupImg, pupNameH2, pupButton)   
+    pupButton.classList.add("profile")
 
     pupSpan.addEventListener("click", (evt)=>{
+        let profile = document.querySelectorAll(".profile")
+        profile.forEach(ele => ele.remove())
         fetch(`http://localhost:3000/pups/${pup.id}`)
         .then(res => res.json())
         .then(pupShowObj => {
@@ -50,7 +53,7 @@ let turnObjToHTML = (pup) => {
     //     pupButton.innerText = pup.isGoodDog ? "Good Dog" : "Bad Dog"
     //     dogInfo.append(pupImg, pupNameH2, pupButton)  
     // })
-    
+  
     pupButton.addEventListener("click", (evt)=>{
         let newGoodOrBad = !pup.isGoodDog 
         //update the backend
@@ -72,10 +75,33 @@ let turnObjToHTML = (pup) => {
             pupButton.innerText = pupObj.isGoodDog ? "Good Dog" : "Bad Dog"
         })
     })
-
-
 }    
 
+function removeSpan() {
+    let pupNameSpanBar = document.querySelectorAll(".pupNameSpanBar")
+    pupNameSpanBar.forEach(ele => ele.remove())
+}
+
+filterButton.addEventListener("click", (evt)=> {
+    butontext = filterButton.innerText 
+    removeSpan()
+    if (butontext === "Filter good dogs: OFF") {
+        filterButton.innerText = "Filter good dogs: ON"
+        fetch("http://localhost:3000/pups")
+        .then(res => res.json())
+        .then(pupsObj => {
+            pupsObj.forEach(pupObj => {
+                if(pupObj.isGoodDog === true){
+                    turnObjToHTML(pupObj)  
+                }
+            })
+        })
+            
+    } else {
+        filterButton.innerText = "Filter good dogs: OFF"
+        getAllpups()
+    }
+})
 
 
 
