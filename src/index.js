@@ -1,5 +1,6 @@
 const dogBar = document.querySelector("#dog-bar")
 const dogInfo=document.querySelector("#dog-info")
+const filterButton = document.querySelector("#good-dog-filter")
 
 
 
@@ -7,13 +8,12 @@ const dogInfo=document.querySelector("#dog-info")
 fetch("http://localhost:3000/pups")
     .then(res => res.json())
     .then(pupsArray => {
+
         pupsArray.forEach(pup => {
             let nameSpan = document.createElement("span")
             nameSpan.innerText = pup.name
             dogBar.append(nameSpan)
 
-         
-       
 
         nameSpan.addEventListener("click", (e) => {
             // dogInfo.children.forEach((child) => {
@@ -26,13 +26,13 @@ fetch("http://localhost:3000/pups")
             imgTag.src=pup.image
             h2Tag.innerText=pup.name
             
-            if(pup.isGoodDog==true){
-               buttonBoolean.innerText="Good Dog!"
-            }else{
-                buttonBoolean.innerText="Bad Dog!"
+            if(pup.isGoodDog == true) {
+               buttonBoolean.innerText = "Good Dog!"
+            } else {
+                buttonBoolean.innerText = "Bad Dog!"
             }
         
-           dogInfo.innerText=""
+           dogInfo.innerText = ""
          
             dogInfo.append(imgTag, h2Tag, buttonBoolean)
 
@@ -54,27 +54,40 @@ fetch("http://localhost:3000/pups")
                   .then(resp => resp.json())
                   .then(updatedPup => {
                    
-                     if(updatedPup.isGoodDog==true){
-                        buttonBoolean.innerText="Good Dog!"
-                     }else{
-                         buttonBoolean.innerText="Bad Dog!"
+                     if(updatedPup.isGoodDog == true) {
+                        buttonBoolean.innerText = "Good Dog!"
+                     } else {
+                         buttonBoolean.innerText = "Bad Dog!"
                      }
                      
-                  pup.isGoodDog=updatedPup.isGoodDog
+                  pup.isGoodDog = updatedPup.isGoodDog
                   })
-
-
-
              })
-
-            })
-            
-            
-            
+            })   
         })
 
+        filterButton.addEventListener("click", (evt) => {
+            // console.log(evt.target)
+            let nameSpan = document.querySelectorAll("span")
 
-       
+            if (filterButton.innerText === "Filter good dogs: OFF") {
+                filterButton.innerText = "Filter good dogs: ON"
+            } else if (filterButton.innerText === "Filter good dogs: ON") {
+                filterButton.innerText = "Filter good dogs: OFF"
+            }
 
-        }) 
+            const badPups = pupsArray.filter(pup => {
+                return pup.isGoodDog === false
+            })
+             console.log(nameSpan)
+            // nameSpan.style.visibility = "hidden"
+
+            // badPups.forEach(singlePup => {
+            //     console.log(singlePup)
+            //     singlePup.style.display = "none"
+            // }) 
+            
+        })
+    }) 
+    
     
