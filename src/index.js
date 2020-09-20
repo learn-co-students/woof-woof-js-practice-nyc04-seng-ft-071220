@@ -1,5 +1,6 @@
 const dogBar = document.querySelector('#dog-bar')
 const dogInfo = document.querySelector('#dog-info')
+const filterBtn = document.querySelector('#good-dog-filter')
 
 const turnDoggosIntoObjects = (doggoArray) => {
     doggoArray.forEach(dog => {
@@ -21,23 +22,18 @@ const turnDoggosIntoObjects = (doggoArray) => {
             dog.isGoodDog ? doggoBtn.innerText = 'Good Dog' : doggoBtn.innerText = 'Bad Dog'
 
             doggoBtn.addEventListener('click', event => {
-                console.log('OG dog boolean value', dog.isGoodDog)
                 let doggoBoolean = !dog.isGoodDog
-                console.log('new boolean getting assigned', doggoBoolean)
                 fetch(`http://localhost:3000/pups/${dog.id}`, {
-                        method: 'PATCH',
-                        header: {
+                        method: "PATCH",
+                        headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            isGoodDog: doggoBoolean,
-                            // backend not updating
+                            isGoodDog: doggoBoolean
                         })
                     })
                     .then(response => response.json())
                     .then((updatedObj) => {
-                        console.log('OG dog', dog)
-                        console.log('Updated Dog', updatedObj)
                         dog.isGoodDog = updatedObj.isGoodDog
                         dog.isGoodDog ? doggoBtn.innerText = 'Good Dog' : doggoBtn.innerText = 'Bad Dog'
                     })
