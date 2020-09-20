@@ -11,7 +11,7 @@ const turnDoggosIntoObjects = (doggoArray) => {
             if (dogInfo.hasChildNodes()) {
                 dogInfo.removeChild(dogInfo.childNodes[0])
             }
-            
+
             let dogContainer = document.createElement('div')
             let dogH2 = document.createElement('h2')
             dogH2.innerText = dog.name
@@ -20,29 +20,31 @@ const turnDoggosIntoObjects = (doggoArray) => {
             let doggoBtn = document.createElement('button')
             dog.isGoodDog ? doggoBtn.innerText = 'Good Dog' : doggoBtn.innerText = 'Bad Dog'
 
-            dogContainer.append(dogH2, doggoBtn, dogImg)
-            dogInfo.append(dogContainer)
-
             doggoBtn.addEventListener('click', event => {
+                console.log('OG dog boolean value', dog.isGoodDog)
                 let doggoBoolean = !dog.isGoodDog
+                console.log('new boolean getting assigned', doggoBoolean)
                 fetch(`http://localhost:3000/pups/${dog.id}`, {
                         method: 'PATCH',
                         header: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            isGoodDog: doggoBoolean
+                            isGoodDog: doggoBoolean,
                             // backend not updating
                         })
                     })
                     .then(response => response.json())
                     .then((updatedObj) => {
-                        console.log(dog)
-                        console.log(updatedObj)
+                        console.log('OG dog', dog)
+                        console.log('Updated Dog', updatedObj)
                         dog.isGoodDog = updatedObj.isGoodDog
                         dog.isGoodDog ? doggoBtn.innerText = 'Good Dog' : doggoBtn.innerText = 'Bad Dog'
                     })
             })
+
+            dogContainer.append(dogH2, doggoBtn, dogImg)
+            dogInfo.append(dogContainer)
 
         })
 
