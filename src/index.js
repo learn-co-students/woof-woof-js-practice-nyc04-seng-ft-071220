@@ -12,13 +12,11 @@ fetch("http://localhost:3000/pups")
         pupsArray.forEach(pup => {
             let nameSpan = document.createElement("span")
             nameSpan.innerText = pup.name
+            nameSpan.setAttribute('data-on-off', pup.isGoodDog)
             dogBar.append(nameSpan)
 
 
         nameSpan.addEventListener("click", (e) => {
-            // dogInfo.children.forEach((child) => {
-            //     child.remove()
-            // })
             let imgTag=document.createElement("img")
             let h2Tag=document.createElement("h2")
             let buttonBoolean=document.createElement("button")
@@ -67,27 +65,27 @@ fetch("http://localhost:3000/pups")
         })
 
         filterButton.addEventListener("click", (evt) => {
-            // console.log(evt.target)
             let nameSpan = document.querySelectorAll("span")
 
             if (filterButton.innerText === "Filter good dogs: OFF") {
                 filterButton.innerText = "Filter good dogs: ON"
+                nameSpan.forEach( (dog) =>{
+                    //inner if statement
+                    if(dog.dataset.onOff === "false"){
+                        dog.style.visibility = "hidden"
+                    }
+                })
             } else if (filterButton.innerText === "Filter good dogs: ON") {
                 filterButton.innerText = "Filter good dogs: OFF"
+                nameSpan.forEach( (dog) =>{
+                    //inner if statement
+                    if(dog.dataset.onOff === "false"){
+                        dog.style.visibility = "visible"
+                    }
+                })
             }
-
-            const badPups = pupsArray.filter(pup => {
-                return pup.isGoodDog === false
-            })
-             console.log(nameSpan)
-            // nameSpan.style.visibility = "hidden"
-
-            // badPups.forEach(singlePup => {
-            //     console.log(singlePup)
-            //     singlePup.style.display = "none"
-            // }) 
             
-        })
-    }) 
+            })            
+        }) 
     
     
