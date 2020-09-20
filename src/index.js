@@ -18,7 +18,6 @@ getAllpups()
 
 
   
-  
 let turnObjToHTML = (pup) => {
     let pupSpan = document.createElement('span')
     pupSpan.innerText = pup.name
@@ -26,17 +25,18 @@ let turnObjToHTML = (pup) => {
     dogBar.append(pupSpan)
     pupSpan.style.cursor = "pointer"
 
-   
-    let pupImg = document.createElement('img')
-    pupImg.classList.add("profile")
-    let pupNameH2 = document.createElement('h2')
-    pupNameH2.classList.add("profile")
-    let pupButton = document.createElement('button')
-    pupButton.classList.add("profile")
 
     pupSpan.addEventListener("click", (evt)=>{
+        let pupImg = document.createElement('img')
+        pupImg.classList.add("profile")
+        let pupNameH2 = document.createElement('h2')
+        pupNameH2.classList.add("profile")
+        let pupButton = document.createElement('button')
+        pupButton.classList.add("profile")
+
         let profile = document.querySelectorAll(".profile")
         profile.forEach(ele => ele.remove())
+        // dogInfo.innerHTML = ""
         fetch(`http://localhost:3000/pups/${pup.id}`)
         .then(res => res.json())
         .then(pupShowObj => {
@@ -45,6 +45,7 @@ let turnObjToHTML = (pup) => {
             pupButton.innerText = pupShowObj.isGoodDog ? "Good Dog" : "Bad Dog"
             dogInfo.append(pupImg, pupNameH2, pupButton)  
         })
+        changeButton(pupButton)
     })
 
     // pupSpan.addEventListener("click", (evt)=>{
@@ -53,7 +54,7 @@ let turnObjToHTML = (pup) => {
     //     pupButton.innerText = pup.isGoodDog ? "Good Dog" : "Bad Dog"
     //     dogInfo.append(pupImg, pupNameH2, pupButton)  
     // })
-  
+    function changeButton(pupButton) {
     pupButton.addEventListener("click", (evt)=>{
         let newGoodOrBad = !pup.isGoodDog 
         //update the backend
@@ -75,7 +76,10 @@ let turnObjToHTML = (pup) => {
             pupButton.innerText = pupObj.isGoodDog ? "Good Dog" : "Bad Dog"
         })
     })
+    }
 }    
+
+
 
 function removeSpan() {
     let pupNameSpanBar = document.querySelectorAll(".pupNameSpanBar")
